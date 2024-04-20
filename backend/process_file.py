@@ -14,38 +14,38 @@ import fitz
 def convert_doc_to_pdf(doc_path, pdf_path):
     subprocess.run(['libreoffice', '--convert-to', 'pdf', '--outdir', os.path.dirname(pdf_path), doc_path])
 
-# Function to convert PDF to text
-def convert_pdf_to_text(pdf_path):
+# Function to convert PDF to images
+def convert_pdf_to_images(pdf_path):
     images = convert_from_path(pdf_path)
-    pdf_text = ""
-    for image in images:
-        pdf_text += pytesseract.image_to_string(image, lang='rus')
-        pdf_text += "\n"  # Add a newline between pages
-    return pdf_text
+    return images
+
+# Function to convert image to text
+def extract_text_from_image(image):
+    image = preprocess_image(image)
+    text = pytesseract.image_to_string(image, lang='rus')
+    return text
 
 # Function to extract text from different file formats
-
 def extract_text_from_file(file_path):
     text = ""
     file_path_lower = file_path.lower()  # Use a lower case version of file_path to simplify checks
 
-    if file_path_lower.endswith('.pdf'):
-        try:
-            doc = fitz.open(file_path)
-            for page in doc:
-                text += page.get_text()
-            doc.close()
-        except Exception as e:
-            text = "Failed to process PDF: " + str(e)
-            print(text)  # More detailed error printout
-
-    elif file_path_lower.endswith(('.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tiff', '.tif')):
+    if file_path_lower.endswith(('.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tiff', '.tif')):
         try:
             image = Image.open(file_path)
-            image = preprocess_image(image)
-            text = pytesseract.image_to_string(image, lang='rus')
+            text = extract_text_from_image(image)
         except Exception as e:
             text = "Failed to process image: " + str(e)
+            print(text)  # More detailed error printout
+
+    elif file_path_lower.endswith('.pdf'):
+        try:
+            images = convert_pdf_to_images(file_path)
+            for img in images:
+                img_text = extract_text_from_image(img)
+                text += img_text + "\n"  # Add a newline between pages
+        except Exception as e:
+            text = "Failed to process PDF: " + str(e)
             print(text)  # More detailed error printout
 
     else:
@@ -103,7 +103,7 @@ def translate_russian_to_english(long_text, max_length=512):
     final_translation = ". ".join(translated_paragraphs)
     return final_translation
 
-# Function to handle different input types (image, PDF, DOC)
+# Function to handle different input types (image, PDF)
 def handle_input(input_path):
     if os.path.isfile(input_path):
         return extract_text_from_file(input_path)
