@@ -7,7 +7,7 @@ This repository contains a Translator App with separate backend and frontend com
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/bittoob/russian_to_english/translator_app.git
+git clone https://github.com/santoshs0293/HAL.git
 
 # Navigate to project directory
 
@@ -38,5 +38,6 @@ Frontend Setup
     3. Run the frontend:
        npm start
 
-![image](https://github.com/bittoob/russian_to_english/assets/84467660/21a09236-00c1-4fd9-99b1-5d9524a4cb19)
 
+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
+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
