@@ -7,7 +7,7 @@ This repository contains a Translator App with separate backend and frontend com
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/santoshs0293/HAL.git
+git clone https://github.com/Santoshs0293/HAL.git
 
 # Navigate to project directory
 
@@ -40,4 +40,4 @@ Frontend Setup
 
 
 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
-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
+
